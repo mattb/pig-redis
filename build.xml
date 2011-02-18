@@ -1,0 +1,116 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="hello-ivy" default="run" basedir=".">
+  <property name="ivy.install.version" value="2.2.0" />
+  <condition property="ivy.home" value="${env.IVY_HOME}">
+    <isset property="env.IVY_HOME" />
+  </condition>
+  <property name="ivy.home" value="${user.home}/.ant" />
+  <property name="ivy.jar.dir" value="${ivy.home}/lib" />
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+
+  <target name="download-ivy" unless="offline">
+
+    <mkdir dir="${ivy.jar.dir}"/>
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" 
+      dest="${ivy.jar.file}" usetimestamp="true"/>
+  </target>
+
+  <target name="init-ivy" depends="download-ivy">
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+    it into ant's lib dir (note that the latter copy will always take precedence).
+    We will not fail as long as local lib dir exists (it may be empty) and
+    ivy is in at least one of ant's lib dir or the local lib dir. -->
+    <path id="ivy.lib.path">
+      <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+    </path>
+
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+      uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+  </target>
+  <!-- ================================= 
+  target: resolve              
+  ================================= -->
+  <target name="libscheck">
+    <uptodate property="libs.uptodate">
+      <srcfiles dir="." includes="ivy.xml"/>
+      <mapper type="merge" to="lib/.done"/>
+    </uptodate>
+  </target>
+
+  <target name="resolve" description="--> retrieve dependencies with ivy"
+    depends="init-ivy,libscheck" unless="libs.uptodate">
+    <ivy:retrieve />
+    <touch file="lib/.done" />
+  </target>
+
+  <description>
+    simple example build file
+  </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+  </target>
+
+  <path id="project.classpath">
+    <pathelement path="${build}"/>
+    <fileset dir="lib">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="compile" depends="init,resolve"
+    description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" debug="yes">
+      <classpath refid="project.classpath" />
+    </javac>
+  </target>
+
+  <target name="run" depends="compile">
+    <!-- description="Execute the program as-is - no compilation is performed" -->
+    <java classname="Jacksontest" fork="yes">
+      <jvmarg value="-Xmx2048m -Xms2048m" />
+      <classpath>
+        <path refid="project.classpath" />
+      </classpath>
+    </java>
+  </target>
+
+  <target name="dist" depends="compile"
+    description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean"
+    description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+  <target name="hadoop" depends="compile">
+    <mkdir dir="${build}/lib"/>
+    <unjar src="lib/jedis-1.5.2.jar" dest="${build}" />
+    
+    <jar jarfile="${dist}/pig-redis.jar"
+         basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" 
+                   value="com.hackdiary.pig.RedisStorer"/>
+      </manifest>
+    </jar>
+  </target>
+
+</project>

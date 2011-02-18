@@ -1,0 +1,9 @@
+<ivy-module version="2.0">
+  <info organisation="org.apache" module="hello-ivy"/>
+  <dependencies>
+    <dependency org="redis.clients" name="jedis" rev="1.5.2"/>
+    <dependency org="org.apache.pig" name="pig" rev="0.8.0"/>
+    <dependency org="org.apache.hadoop" name="hadoop-core" rev="0.20.2"/>
+    <dependency org="commons-lang" name="commons-lang" rev="2.5"/>
+  </dependencies>
+</ivy-module>
