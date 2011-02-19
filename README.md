@@ -21,7 +21,7 @@ Use:
 
 RedisStorer runs in three modes: kv, set and hash (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
 
-In kv mode, it takes the first field of the stored tuple as the key, and the second field as the value, and issues [SET key value](http://redis.io/commands/set).
+In kv mode, it takes the first field of the stored tuple as the key, and the second field as the value, and issues [SET key value](http://redis.io/commands/set). Any further fields are ignored.
 
 In set mode, it takes the first field of the stored tuple as the key, and issues [SADD key value](http://redis.io/commands/sadd) once for each subsequent field value in the tuple.
 
