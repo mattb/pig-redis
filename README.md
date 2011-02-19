@@ -25,4 +25,4 @@ In kv mode, it takes the first field of the stored tuple as the key, and the sec
 
 In set mode, it takes the first field of the stored tuple as the key, and issues [SADD key value](http://redis.io/commands/sadd) once for each subsequent field value in the tuple.
 
-In hash mode, it takes the first field of the stored tuple as the key, and issues [HSET key fieldname value](http://redis.io/commands/sadd) once for each subsequent field value, using the same key for each, and taking the fieldname from the tuple's schema fieldnames. This means that it will fail unless the stored tuple has a schema with named fields.
+In hash mode, it takes the first field of the stored tuple as the key, and issues [HSET key fieldname value](http://redis.io/commands/hset) once for each subsequent field value, using the same key for each, and taking the fieldname from the tuple's schema fieldnames. This means that it will fail unless the stored tuple has a schema with named fields.
