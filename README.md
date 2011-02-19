@@ -6,6 +6,8 @@ A [UDF StoreFunc](http://pig.apache.org/docs/r0.8.0/udf.html#Store+Functions) fo
 
 Compile:
 
+Dependencies are automatically retrieved using [Ivy](http://ant.apache.org/ivy/).
+
     $ ant hadoop
 
 Use:
