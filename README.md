@@ -1,6 +1,6 @@
 # RedisStorer
 
-A [UDF StoreFunc](http://pig.apache.org/docs/r0.8.0/udf.html#Store+Functions) for [Apache Pig](http://pig.apache.org/) designed to bulk-load data into [Redis](http://redis.io).
+A [UDF StoreFunc](http://pig.apache.org/docs/r0.8.0/udf.html#Store+Functions) for [Apache Pig](http://pig.apache.org/) designed to bulk-load data into [Redis](http://redis.io). Inspired by [wonderdog](https://github.com/infochimps/wonderdog), the Infochimps bulk-loader for elasticsearch.
 
 ## Compiling and running
 
