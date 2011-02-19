@@ -1,8 +1,8 @@
 # RedisStorer
 
-A [UDF StoreFunc](http://pig.apache.org/docs/r0.8.0/udf.html#Store+Functions) for [Apache Pig](http://pig.apache.org/) designed to bulk-load data into [Redis](http://redis.io)
+A [UDF StoreFunc](http://pig.apache.org/docs/r0.8.0/udf.html#Store+Functions) for [Apache Pig](http://pig.apache.org/) designed to bulk-load data into [Redis](http://redis.io).
 
-# Compiling and running
+## Compiling and running
 
 Compile:
 
@@ -17,7 +17,7 @@ Use:
     grunt> a = LOAD 'somefile.tsv' USING PigStorage('\t');
     grunt> STORE a INTO 'dummy-filename-is-ignored' USING com.hackdiary.pig.RedisStorer('kv', 'localhost');
 
-# Bulkloading strategy
+## Bulkloading strategy
 
 RedisStorer runs in three modes: kv, set and hash (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
 
