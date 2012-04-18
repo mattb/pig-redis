@@ -11,7 +11,7 @@
 
     <mkdir dir="${ivy.jar.dir}"/>
     <!-- download Ivy from web site so that it can be used even without any special installation -->
-    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" 
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
       dest="${ivy.jar.file}" usetimestamp="true"/>
   </target>
 
@@ -27,8 +27,8 @@
     <taskdef resource="org/apache/ivy/ant/antlib.xml"
       uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
   </target>
-  <!-- ================================= 
-  target: resolve              
+  <!-- =================================
+  target: resolve
   ================================= -->
   <target name="libscheck">
     <uptodate property="libs.uptodate">
@@ -103,12 +103,12 @@
   <target name="hadoop" depends="compile">
     <mkdir dir="${build}/lib"/>
     <unjar src="lib/jedis-1.5.2.jar" dest="${build}" />
-    
+
     <jar jarfile="${dist}/pig-redis.jar"
          basedir="${build}">
       <manifest>
-        <attribute name="Main-Class" 
-                   value="com.hackdiary.pig.RedisStorer"/>
+        <attribute name="Main-Class"
+                   value="com.bronto.hadoop.pig.RedisStorer"/>
       </manifest>
     </jar>
   </target>
