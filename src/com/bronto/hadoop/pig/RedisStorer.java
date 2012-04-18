@@ -1,4 +1,4 @@
-package com.hackdiary.pig;
+package com.bronto.hadoop.pig;
 
 import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
