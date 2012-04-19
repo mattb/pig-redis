@@ -19,7 +19,7 @@ Use:
 
 ## Bulkloading strategy
 
-RedisStorer runs in three modes: kv, set and hash (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
+RedisStorer runs in four modes: kv, set, list and hash (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
 
 In kv mode, it takes the first field of the stored tuple as the key, and the second field as the value, and issues [SET key value](http://redis.io/commands/set). Any further fields are ignored.
 
