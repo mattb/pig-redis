@@ -1,4 +1,4 @@
-package com.bronto.hadoop.pig;
+package com.bronto.hadoop.pig.storage;
 
 import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
