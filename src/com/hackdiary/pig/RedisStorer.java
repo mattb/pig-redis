@@ -54,7 +54,7 @@ public class RedisStorer extends StoreFunc {
           _jedis.set(key,values.get(1).toString());
         }
       }
-      if(_mode.equals("set")) {
+      else if(_mode.equals("set")) {
         int idx = 0;
         Pipeline p = _jedis.pipelined();
         for(Object o : values) {
@@ -75,7 +75,7 @@ public class RedisStorer extends StoreFunc {
         }
         p.execute();
       }
-      if(_mode.equals("hash")) {
+      else if(_mode.equals("hash")) {
         UDFContext context  = UDFContext.getUDFContext();
         Properties property = context.getUDFProperties(ResourceSchema.class);
         String fieldNames = property.getProperty("redis.field.names");
@@ -91,6 +91,27 @@ public class RedisStorer extends StoreFunc {
         }
         p.execute();
       }
+      else if(_mode.equals("list")) {
+          int idx = 0;
+          Pipeline p = _jedis.pipelined();
+          for(Object o : values) {
+            if(idx != 0 && o != null) {
+              switch (DataType.findType(o)) {
+                case DataType.TUPLE:
+                case DataType.BAG:
+                  for(Object o2 : (Iterable)o) {
+                    p.lpush(key, o2.toString());
+                  }
+                  break;
+                default:
+                  p.lpush(key, o.toString());
+                  break;
+              }
+            }
+            idx++;
+          }
+          p.execute();
+        }
     }
 
   @Override
