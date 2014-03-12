@@ -19,11 +19,13 @@ Use:
 
 ## Bulkloading strategy
 
-RedisStorer runs in four modes: kv, set, hash and list (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
+RedisStorer runs in four modes: kv, set, zset, hash and list (specified as the first argument to RedisStorer). If no mode is specified, kv is the default.
 
 In kv mode, it takes the first field of the stored tuple as the key, and the second field as the value, and issues [SET key value](http://redis.io/commands/set). Any further fields are ignored.
 
 In set mode, it takes the first field of the stored tuple as the key, and issues [SADD key value](http://redis.io/commands/sadd) once for each subsequent field value in the tuple.
+
+In set mode, it takes the first field of the stored tuple as the key, and issues [ZADD key value](http://redis.io/commands/zadd) once for each subsequent two field values in the tuple. The first field value will be interpreted as a Double typed score, the second will be interpreted as the value itself.
 
 In hash mode, it takes the first field of the stored tuple as the key, and issues [HSET key fieldname value](http://redis.io/commands/hset) once for each subsequent field value, using the same key for each, and taking the fieldname from the tuple's schema fieldnames. This means that it will fail unless the stored tuple has a schema with named fields.
 

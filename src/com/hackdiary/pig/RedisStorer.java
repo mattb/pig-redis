@@ -75,6 +75,37 @@ public class RedisStorer extends StoreFunc {
         }
         p.execute();
       }
+      else if(_mode.equals("zset")) {
+        int idx = 0;
+        Pipeline p = _jedis.pipelined();
+        for(Object o : values) {
+          if(idx != 0 && o != null) {
+            switch (DataType.findType(o)) {
+              case DataType.TUPLE:
+              case DataType.BAG:
+                {
+                  String[] a = new String[2];
+                  int index = 0;
+                  for (Object o2 : (Iterable)o) {
+                    a[index++] = o2.toString();
+                    if (index == 2) {
+                      p.zadd(key, Double.parseDouble(a[1]), a[0]);
+                      index = 0;
+                    }
+                  }
+                }
+                break;
+              default:
+                /* If we are given any other type, what does that even mean with a zset?
+                 * Arbitrarily decide to set to 0.0 score. Need input from maintainers. */
+                p.zadd(key, 0.0, o.toString());
+                break;
+            }
+          }
+          idx++;
+        }
+        p.execute();
+      }
       else if(_mode.equals("hash")) {
         UDFContext context  = UDFContext.getUDFContext();
         Properties property = context.getUDFProperties(ResourceSchema.class);
